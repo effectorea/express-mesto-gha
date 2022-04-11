@@ -4,7 +4,8 @@
   "description": "сервер для Mesto",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/effectorea/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/effectorea/express-mesto-gha#readme"
+  "homepage": "https://github.com/effectorea/express-mesto-gha#readme",
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
