@@ -36,7 +36,7 @@ module.exports.updateProfile = (req, res) => {
           message: `Такого пользователя c id${req.user._id}  не существует`,
         });
       }
-      return res.status(200).send(user);
+      return res.status(200).send({ data: user });
     })
     .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
@@ -50,7 +50,7 @@ module.exports.updateAvatar = (req, res) => {
           message: `Такого пользователя c id${req.user._id}  не существует`,
         });
       }
-      return res.status(200).send(user);
+      return res.status(200).send({ data: user });
     })
     .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
 };
