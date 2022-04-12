@@ -33,12 +33,12 @@ module.exports.updateProfile = (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(400).send({
-          message: `Такого пользователя c id${req.user._id}  не существует`,
+          message: 'Переданы некорректные данные',
         });
       }
       return res.status(200).send({ data: user });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные' }));
 };
 
 module.exports.updateAvatar = (req, res) => {
@@ -47,10 +47,10 @@ module.exports.updateAvatar = (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(400).send({
-          message: `Такого пользователя c id${req.user._id}  не существует`,
+          message: 'Переданы некорректные данные',
         });
       }
       return res.status(200).send({ data: user });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные' }));
 };
