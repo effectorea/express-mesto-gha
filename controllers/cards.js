@@ -3,7 +3,7 @@ const Card = require('../models/card');
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.status(200).send({ data: cards }))
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -11,7 +11,12 @@ module.exports.createCard = (req, res) => {
 
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(200).send({ data: card }))
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -24,7 +29,12 @@ module.exports.deleteCard = (req, res) => {
       }
       return res.status(200).send({ message: 'Карточка удалена', data: card });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.likeCard = (req, res) => {
@@ -41,7 +51,12 @@ module.exports.likeCard = (req, res) => {
       }
       return res.status(200).send({ data: card });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.dislikeCard = (req, res) => {
@@ -58,5 +73,10 @@ module.exports.dislikeCard = (req, res) => {
       }
       return res.status(200).send({ data: card });
     })
-    .catch(() => res.status(400).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
