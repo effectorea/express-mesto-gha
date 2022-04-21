@@ -1,10 +1,23 @@
+/* eslint-disable spaced-comment */
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.status(200).send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
+
+module.exports.getUserInfo = (req, res) => {
+  User.findById(req.user._id)
+    .then((user) => res.status(200).send({ data: user }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(500).send({ message: 'Произошла ошибка' });
+    });
 };
 
 module.exports.createUser = (req, res) => {
@@ -24,6 +37,8 @@ module.exports.createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные' });
+      } if (err.code === 11000) {
+        return res.status(409).send({ message: 'Данный email уже существует в базе' });
       }
       return res.status(500).send({ message: 'Произошла ошибка' });
     });
@@ -94,5 +109,24 @@ module.exports.updateAvatar = (req, res) => {
           .send({ message: 'Переданы некорректные данные' });
       }
       return res.status(500).send({ message: 'Произошла ошибка' });
+    });
+};
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body; //получаем из запроса почту и пароль
+  return User.findUserByCredentials(email, password) //если почта и пароль правильные, то
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }); //создается JWT сроком на неделю
+      res
+        .cookie('jwt', token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        });
+      res.status(201).send({ token, message: 'Пользователь успешно зарегистрирован' });
+    })
+    .catch(() => {
+      res
+        .status(401)
+        .send({ message: 'Ошибка регистрации' });
     });
 };
