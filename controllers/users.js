@@ -33,6 +33,7 @@ module.exports.createUser = (req, res) => {
       email,
       password: hash,
     }))
+    .then((user) => User.findOne({ _id: user._id }))
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
