@@ -115,6 +115,7 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) return res.status(400).send({ message: 'Поля не могут быть пустыми' });
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
