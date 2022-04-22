@@ -47,3 +47,15 @@ module.exports.loginValidation = celebrate({
     password: Joi.string().required().min(8),
   }),
 });
+
+module.exports.cardIdValidation = celebrate({
+  body: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
+});
+
+module.exports.userIdValidation = celebrate({
+  body: Joi.object().keys({
+    userId: Joi.string().length(24).hex(),
+  }),
+});
