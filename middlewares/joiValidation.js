@@ -18,7 +18,7 @@ module.exports.userValidation = celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom((value, helpers) => {
-      if (validator.isUrl(value)) {
+      if (validator.isURL(value)) {
         return value;
       }
       return helpers.message('Неправильный формат ссылки');
@@ -38,7 +38,7 @@ module.exports.userProfileValidation = celebrate({
 module.exports.avatarValidation = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().custom((value, helpers) => {
-      if (validator.isUrl(value)) {
+      if (validator.isURL(value)) {
         return value;
       }
       return helpers.message('Ссылка не подходит');
@@ -54,13 +54,13 @@ module.exports.loginValidation = celebrate({
 });
 
 module.exports.cardIdValidation = celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     cardId: Joi.string().length(24).hex(),
   }),
 });
 
 module.exports.userIdValidation = celebrate({
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     userId: Joi.string().length(24).hex(),
   }),
 });
