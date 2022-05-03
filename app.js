@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { login, createUser } = require('./controllers/users');
 const { userValidation, loginValidation } = require('./middlewares/joiValidation');
 const auth = require('./middlewares/auth');
@@ -21,6 +22,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
+app.use(requestLogger);
+
 app.post('/signin', loginValidation, login);
 app.post('/signup', userValidation, createUser);
 
@@ -29,6 +32,8 @@ app.use(auth);
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
+
+app.use(errorLogger);
 
 app.use(errors());
 
